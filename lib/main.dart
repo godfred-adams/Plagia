@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:plagia_oc/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bottom_nav_bar.dart';
 import 'firebase_options.dart';
 
 import 'utils/routes.dart';
@@ -29,7 +30,11 @@ class MyApp extends ConsumerWidget {
         fontFamily: "Montserrat",
         useMaterial3: true,
       ),
-      home: const WelcomeScreen() ,
+      home: const MyBottomNavigation(),
+      // const Center(
+      //   child: Text('data'),
+      // ),
+      // WelcomeScreen(),
       onGenerateRoute: (settings) => onGenerateRoute(settings),
     );
   }

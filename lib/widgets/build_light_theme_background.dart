@@ -35,27 +35,32 @@
 //         ),
 //       ));
 // }
-
 import 'package:flutter/material.dart';
 
-Widget buildLightThemeBackground({required Widget mainWidget}) {
+Widget buildLightThemeBackground({
+  required Widget mainWidget,
+  FloatingActionButton? floatingActionButton,
+}) {
   return Scaffold(
+    extendBodyBehindAppBar: true,
     resizeToAvoidBottomInset: false,
-    body: Padding(
-      padding: const EdgeInsets.only(top: 14.0),
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ellipses_white_screen.png'),
-                fit: BoxFit.cover,
-              ),
+    body: Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/ellipses_white_screen.png'),
+              fit: BoxFit.cover,
             ),
           ),
-          mainWidget,
-        ],
-      ),
+        ),
+        SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+          child: mainWidget,
+        )),
+      ],
     ),
+    floatingActionButton: floatingActionButton,
   );
 }
