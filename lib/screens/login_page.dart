@@ -26,9 +26,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     final authNotifier = ref.read(authProvider.notifier);
     return buildLightThemeBackground(
-      mainWidget: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Center(
+      mainWidget: Center(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,

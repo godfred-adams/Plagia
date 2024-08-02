@@ -1,4 +1,3 @@
-
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
@@ -26,26 +25,36 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
   TextEditingController confirmPasswordController = TextEditingController();
 
   void signUp() async {
-    if (emailController.text.trim().isNotEmpty &&
-        passwordController.text.trim().isNotEmpty &&
-        nameController.text.trim().isNotEmpty &&
-        confirmPasswordController.text.trim().isNotEmpty &&
-        (passwordController.text.trim() ==
-            confirmPasswordController.text.trim())) {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmPasswordController.text.trim();
+
+    // Check for empty fields and matching passwords
+    if (name.isNotEmpty &&
+        email.isNotEmpty &&
+        password.isNotEmpty &&
+        confirmPassword.isNotEmpty &&
+        password == confirmPassword) {
+      // Check if name contains only letters
+      final namePattern = RegExp(r'^[a-zA-Z\s]+$');
+      if (!namePattern.hasMatch(name)) {
+        showSnackBar(
+            context: context, txt: "Please enter a name with letters only.");
+        return;
+      }
+
       try {
         setState(() {
           isLoading = true;
         });
         final authNotifier = ref.watch(authProvider.notifier);
         await authNotifier.signUp(
-            name: nameController.text.trim(),
-            email: emailController.text.trim(),
-            password: passwordController.text.trim(),
-            context: context);
+            name: name, email: email, password: password, context: context);
 
         showSnackBar(
             context: context,
-            txt: 'Successful sign up \n login with the same credentials');
+            txt: 'Successful sign up \n Login with the same credentials');
         emailController.text = "";
         passwordController.text = "";
         nameController.text = "";
@@ -65,7 +74,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
     } else {
       showSnackBar(
           context: context,
-          txt: "Something went wrong check your credentials well");
+          txt: "Something went wrong, check your credentials.");
     }
   }
 
@@ -80,12 +89,12 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          buildLightThemeBackground(
-            mainWidget: Padding(
-              padding: const EdgeInsets.fromLTRB(18.0, 0, 18.0, 18.0),
+    return Stack(
+      children: [
+        buildLightThemeBackground(
+          mainWidget: Padding(
+            padding: const EdgeInsets.fromLTRB(18.0, 0, 18.0, 18.0),
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +110,6 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                   const Text(
                       'Welcome! Enter your details to create a free account today.'),
                   const SizedBox(height: 30),
-
                   CustomTextField(
                     isPassword: false,
                     prefixIcon: Icons.person_outline_outlined,
@@ -159,7 +167,6 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
                   const Center(
                     child: Text(
@@ -168,25 +175,6 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  // Stack(alignment: Alignment.center, children: [
-                  //   const Divider(
-                  //     thickness: 3,
-                  //     color: Colors.black,
-                  //   ),
-                  //   Container(
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(22),
-                  //       color: Colors.white,
-                  //     ),
-                  //     width: 104,
-                  //     height: 24,
-                  //     child: const Text(
-                  //       'or continue',
-                  //       style: TextStyle(fontWeight: FontWeight.bold),
-                  //       textAlign: TextAlign.center,
-                  //     ),
-                  //   ),
-                  // ]),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -245,134 +233,25 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
               ),
             ),
           ),
-          // context: context,
-          // ),
-          if (isLoading)
-            Container(
-              color: Colors.white.withOpacity(0.5),
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5)),
-                  width: 50,
-                  height: 50,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+        ),
+        if (isLoading)
+          Container(
+            color: Colors.white.withOpacity(0.5),
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey, borderRadius: BorderRadius.circular(5)),
+                width: 50,
+                height: 50,
+                child: const Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
-            )
-        ],
-      ),
+            ),
+          )
+      ],
     );
   }
 }
-
-
-
-
-  // mainWidget: Padding(
-  //   padding: const EdgeInsets.fromLTRB(18.0, 0, 18.0, 18.0),
-  //   child: Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Text(
-  //         'Create an account',
-  //         style: TextStyle(
-  //             fontWeight: FontWeight.bold,
-  //             fontSize: 24,
-  //             color: Colors.orange),
-  //       ),
-  //       const SizedBox(height: 8),
-  //       const Text(
-  //           'Welcome! Enter your details to create a free account today.'),
-  //       const SizedBox(height: 12),
-  //       CustomTextField(
-  //         controller: nameController,
-  //         isPassword: false,
-  //         prefixIcon: Icons.person_outline_outlined,
-  //         hintText: 'Enter your name here',
-  //       ),
-  //       const SizedBox(height: 10),
-  //       CustomTextField(
-  //         controller: emailController,
-  //         isPassword: false,
-  //         prefixIcon: Icons.mail,
-  //         hintText: 'Enter your email here',
-  //       ),
-  //       const SizedBox(height: 10),
-  //       CustomTextField(
-  //         controller: passwordController,
-  //         isPassword: true,
-  //         prefixIcon: Icons.lock,
-  //         hintText: 'Enter your password here',
-  //       ),
-  //       const SizedBox(height: 10),
-  //       CustomTextField(
-  //         controller: confirmPasswordController,
-  //         isPassword: true,
-  //         prefixIcon: Icons.lock,
-  //         hintText: 'Confirm your password',
-  //       ),
-  //       const SizedBox(height: 20),
-  //       SizedBox(
-  //         width: double.infinity,
-  //         height: 50,
-  //         child: ElevatedButton(
-  //           style: ElevatedButton.styleFrom(
-  //             backgroundColor: Colors.orange,
-  //           ),
-  //           onPressed: signUp,
-  //           child: const Text(
-  //             'Signup',
-  //             style: TextStyle(
-  //                 color: Colors.white,
-  //                 fontWeight: FontWeight.bold,
-  //                 fontSize: 18),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 30),
-  //       Stack(alignment: Alignment.center, children: [
-  //         const Divider(
-  //           thickness: 3,
-  //           color: Colors.black,
-  //         ),
-  //         Container(
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(15),
-  //             color: Colors.white,
-  //           ),
-  //           width: 104,
-  //           height: 24,
-  //           child: const Text(
-  //             'or continue',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //             textAlign: TextAlign.center,
-  //           ),
-  //         ),
-  //       ]),
-  //       const SizedBox(height: 30),
-  //       GestureDetector(
-  //         onTap: () {},
-  //         child: buildContainer(
-  //           'Google',
-  //           'assets/images/g.png',
-  //         ),
-  //       ),
-  //       const SizedBox(height: 20),
-  //       GestureDetector(
-  //         onTap: () {},
-  //         child: buildContainer(
-  //           'Apple',
-  //           'assets/images/a.png',
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  // ),
-
-  // );
