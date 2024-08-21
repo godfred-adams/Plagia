@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:iconly/iconly.dart';
 import 'package:plagia_oc/screens/read_pdf.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -107,7 +108,7 @@ class PickUploadReadPdfState extends State<PickUploadReadPdf> {
                 },
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.orange),
               ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.33),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.23),
               const Text(
                 'Upload Files',
                 style: TextStyle(
@@ -118,7 +119,7 @@ class PickUploadReadPdfState extends State<PickUploadReadPdf> {
               const Spacer(),
             ],
           ),
-          const SizedBox(height: 54),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.14),
           Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -143,33 +144,38 @@ class PickUploadReadPdfState extends State<PickUploadReadPdf> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
-                              Icons.upload_file,
+                              IconlyLight.paper_plus,
                               size: 100.0,
                               color: Colors.black,
                             ),
                             const SizedBox(height: 24.0),
                             const Text(
-                              'Upload your documents and photos here',
+                              'Upload your documents here',
                               style: TextStyle(fontSize: 16.0),
                             ),
                             const SizedBox(height: 32.0),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 32.0),
-                              child: GestureDetector(
-                                onTap: pickPdf,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(6),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 55,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
-                                  height: 45,
-                                  width: double.infinity,
-                                  child: const Center(
-                                      child: Text(
+                                  onPressed:
+                                      pickPdf, // Call the dialog function
+                                  child: const Text(
                                     'Select a document',
-                                    style: TextStyle(color: Colors.white),
-                                  )),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        // fontWeight: FontWeight.bold,
+                                        fontSize: 22),
+                                  ),
                                 ),
                               ),
                             ),

@@ -37,7 +37,7 @@ class _OcrState extends State<Ocr> {
               },
               icon: const Icon(Icons.arrow_back_ios, color: Colors.orange),
             ),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.33),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.26),
             const Text(
               'OCR Scan',
               style: TextStyle(
@@ -113,23 +113,10 @@ class _OcrState extends State<Ocr> {
                   ],
                 ),
               )
-
-              // ElevatedButton(
-              //     onPressed: pickAndRecognizeText,
-              //     child: const Text("Pick an recogize read text on image")),
             ],
           ),
         ),
       ]),
     );
-
-    // Scaffold(
-    //   body: Center(
-    //     child:
-    // ElevatedButton(
-    //         onPressed: pickAndRecognizeText,
-    //         child: const Text("Pick an recogize read text on image")),
-    //   ),
-    // );
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
 
 import '../providers/auth_provider.dart';
 
@@ -89,30 +90,33 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Stack(
       children: [
         buildLightThemeBackground(
-          mainWidget: Padding(
-            padding: const EdgeInsets.fromLTRB(18.0, 0, 18.0, 18.0),
-            child: SingleChildScrollView(
+          mainWidget: SingleChildScrollView(
+            child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(height: size.height * 0.12),
                   const Text(
                     'Create an account',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                        fontSize: 30,
                         color: Colors.orange),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                      'Welcome! Enter your details to create a free account today.'),
+                    'Welcome! Enter your details to create a free account today.',
+                    style: TextStyle(fontSize: 16.5),
+                  ),
                   const SizedBox(height: 30),
                   CustomTextField(
                     isPassword: false,
-                    prefixIcon: Icons.person_outline_outlined,
+                    prefixIcon: IconlyBroken.profile,
                     hintText: 'Enter your full name',
                     controller: nameController,
                   ),
@@ -121,7 +125,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                   ),
                   CustomTextField(
                     isPassword: false,
-                    prefixIcon: Icons.mail,
+                    prefixIcon: IconlyBroken.message,
                     hintText: 'Enter your email here',
                     controller: emailController,
                   ),
@@ -130,7 +134,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                   ),
                   CustomTextField(
                     isPassword: true,
-                    prefixIcon: Icons.lock,
+                    prefixIcon: IconlyBroken.lock,
                     hintText: 'Enter your password here',
                     controller: passwordController,
                   ),
@@ -139,7 +143,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                   ),
                   CustomTextField(
                     isPassword: true,
-                    prefixIcon: Icons.lock,
+                    prefixIcon: IconlyBroken.lock,
                     hintText: 'Confirm your password',
                     controller: confirmPasswordController,
                   ),
@@ -163,7 +167,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                            fontSize: 20),
                       ),
                     ),
                   ),
@@ -208,8 +212,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                     children: [
                       const Text(
                         'Already have an account?',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16.5),
                       ),
                       TextButton(
                         onPressed: () {
@@ -223,6 +226,8 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                         child: const Text(
                           'Login',
                           style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.bold,
                             color: Colors.orange,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 
 class CustomTextField extends StatefulWidget {
   final bool isPassword;
@@ -47,7 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ? IconButton(
                     icon: Icon(
                       size: 18,
-                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                      _obscureText ? IconlyBroken.show : IconlyBroken.hide,
                     ),
                     onPressed: () {
                       setState(() {
