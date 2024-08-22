@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:plagia_oc/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_nav_bar.dart';
@@ -27,8 +28,14 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: "Montserrat",
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme.apply(
+                bodyColor: const Color(0xFF333333),
+                displayColor: const Color(0xFF333333),
+              ),
+        ),
         useMaterial3: true,
+        primaryColor: Colors.orange,
       ),
       home: const MyBottomNavigation(),
       // const Center(

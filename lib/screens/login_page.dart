@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart'; // static const routeName = "/sign-in-screen";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
 
 // import '../providers/auth_provider.dart';
 // import '../widgets/build_container.dart';
@@ -25,6 +26,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final authNotifier = ref.read(authProvider.notifier);
+    final size = MediaQuery.of(context).size;
     return buildLightThemeBackground(
       mainWidget: Center(
         child: SingleChildScrollView(
@@ -32,16 +34,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 108),
+              SizedBox(height: size.height * 0.06),
               const Text(
                 'Welcome back!',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    fontSize: 30,
                     color: Colors.orange),
               ),
               const SizedBox(height: 8),
-              const Text('Enter your details to login to your account.'),
+              const Text('Enter your details to login to your account.',
+                  style: TextStyle(fontSize: 16.5)),
               const SizedBox(height: 24),
               const SizedBox(height: 24),
               // const Text(
@@ -54,7 +57,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               // SizedBox(height: 12),
               CustomTextField(
                 isPassword: false,
-                prefixIcon: Icons.mail,
+                prefixIcon: IconlyBroken.message,
                 hintText: 'Enter your email here',
                 controller: emailController,
               ),
@@ -63,21 +66,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               // SizedBox(height: 12),
               CustomTextField(
                 isPassword: true,
-                prefixIcon: Icons.lock,
+                prefixIcon: IconlyBroken.lock,
                 hintText: 'Enter your password here',
                 controller: passwordController,
               ),
 
-              Align(
-                alignment: Alignment.bottomRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forgot your password?',
-                    style: TextStyle(
-                      color: Colors.orange,
-                      decorationColor: Colors.orange,
-                      fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: const Text(
+                      'Forgot your password?',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        decorationColor: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
                     ),
                   ),
                 ),
@@ -116,7 +123,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                              fontSize: 20),
                         ),
                 ),
               ),
@@ -173,7 +180,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 66),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,7 +188,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   const Text(
                     'Don\'t have an account?',
                     style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                      fontSize: 16.5,
+                      // color: Colors.black,
+                      // fontWeight: FontWeight.bold
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -195,8 +205,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: const Text(
                       'SignUp',
                       style: TextStyle(
-                        color: Colors.orange,
-                      ),
+                          fontSize: 16.5,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

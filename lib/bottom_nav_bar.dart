@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
 
 import 'screens/features_screen.dart';
 import 'screens/files_screen.dart';
@@ -24,34 +25,44 @@ class MyBottomNavigation extends ConsumerWidget {
           ProfileScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          ref.read(bottomNavIndexProvider.notifier).setIndex(index);
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF090B17),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.featured_play_list),
-            label: "Features",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder),
-            label: "Files",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white54,
-        showUnselectedLabels: false,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: Colors.transparent, // Minimizes the ripple effect
+        ),
+        child: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) {
+            ref.read(bottomNavIndexProvider.notifier).setIndex(index);
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color(0xFF090B17),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(IconlyBroken.home),
+              activeIcon: Icon(IconlyBold.home),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(IconlyBold.category),
+              icon: Icon(IconlyBroken.category),
+              label: "Features",
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(IconlyBold.folder),
+              icon: Icon(IconlyBroken.folder),
+              label: "Files",
+            ),
+            BottomNavigationBarItem(
+              activeIcon: Icon(IconlyBold.profile),
+              icon: Icon(IconlyBroken.profile),
+              label: "Profile",
+            ),
+          ],
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white54,
+          showUnselectedLabels: false,
+        ),
       ),
     );
   }
