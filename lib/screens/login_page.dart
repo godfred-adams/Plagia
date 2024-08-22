@@ -8,6 +8,7 @@ import 'package:iconly/iconly.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/build_light_theme_background.dart';
 import '../widgets/custom_textfield.dart';
+import 'forgot_password_page.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -76,7 +77,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen()));
+                    },
                     child: const Text(
                       'Forgot your password?',
                       style: TextStyle(

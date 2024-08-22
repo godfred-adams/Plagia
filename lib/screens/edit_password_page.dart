@@ -1,57 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
+import 'package:plagia_oc/widgets/custom_textfield.dart';
 
-import 'edit_password_page.dart';
-import 'login_page.dart';
-
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class EditPasswordScreen extends StatefulWidget {
+  const EditPasswordScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<EditPasswordScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  String getDaySuffix(String day) {
-    if (day.endsWith('1') && day != '11') {
-      return 'st';
-    } else if (day.endsWith('2') && day != '12') {
-      return 'nd';
-    } else if (day.endsWith('3') && day != '13') {
-      return 'rd';
-    } else {
-      return 'th';
-    }
-  }
+class _ProfileScreenState extends State<EditPasswordScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   bool _obscureText = true;
-  bool _isDarkTheme = false;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    DateTime now = DateTime.now();
+    // DateTime now = DateTime.now();
 
     // Extract the day, suffix, and the rest of the date separately
-    String day = DateFormat('d').format(now);
-    String suffix = getDaySuffix(day);
-    String formattedDate = DateFormat("MMMM, yyyy").format(now);
+    // String day = DateFormat('d').format(now);
+    // // String suffix = getDaySuffix(day);
+    // String formattedDate = DateFormat("MMMM, yyyy").format(now);
 
     return buildLightThemeBackground(
       mainWidget: Center(
         child: Column(
           children: [
-            SizedBox(height: size.height * 0.016),
-            const Text(
-              'Profile',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.orange),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.267),
+                const Text(
+                  'Edit Profile',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+                const Spacer(),
+              ],
             ),
+            //SizedBox(height: size.height * 0.016),
+            // const Text(
+            //   'Profile',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 22,
+            //   ),
+            // ),
             SizedBox(height: size.height * 0.022),
             Container(
               height: 126,
@@ -76,110 +85,126 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: size.height * 0.012),
 
             // Display the formatted date with superscript suffix
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: day,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  WidgetSpan(
-                    child: Transform.translate(
-                      offset: const Offset(1.0, -5.0),
-                      child: Text(
-                        suffix,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' $formattedDate',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Text.rich(
+            //   TextSpan(
+            //     children: [
+            //       TextSpan(
+            //         text: day,
+            //         style: const TextStyle(
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.w500,
+            //         ),
+            //       ),
+            //       WidgetSpan(
+            //         child: Transform.translate(
+            //           offset: const Offset(1.0, -5.0),
+            //           child: Text(
+            //             suffix,
+            //             textScaleFactor: 0.7,
+            //             style: const TextStyle(
+            //               fontWeight: FontWeight.w500,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       TextSpan(
+            //         text: ' $formattedDate',
+            //         style: const TextStyle(
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.w500,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
-            SizedBox(height: size.height * 0.014),
-            Row(
-              children: [
-                const Text(
-                  'Personal Information',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditPasswordScreen()));
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(IconlyBold.edit, size: 18),
-                      SizedBox(width: 2),
-                      Text(
-                        'Edit',
-                        style: TextStyle(fontSize: 18, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: size.height * 0.008),
-            _buildPersonalInfo(context),
-            SizedBox(height: size.height * 0.032),
+            SizedBox(height: size.height * 0.016),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Utilities',
+                  'Update Details',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ],
             ),
             SizedBox(height: size.height * 0.008),
-            _buildUtilities(context),
-            SizedBox(height: size.height * 0.028),
-            _buildLogoutButton(),
+            CustomTextField(
+              isPassword: false,
+              prefixIcon: IconlyBroken.message,
+              hintText: 'Enter your email here',
+              controller: emailController,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomTextField(
+              isPassword: true,
+              prefixIcon: IconlyBroken.lock,
+              hintText: 'Enter your password here',
+              controller: passwordController,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomTextField(
+              isPassword: true,
+              prefixIcon: IconlyBroken.lock,
+              hintText: 'Confirm your password',
+              controller: confirmPasswordController,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  backgroundColor: Colors.orange,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Update',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUtilities(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        _buildUtilitiesBox(
-          icon: const Icon(Icons.color_lens_rounded),
-          title: 'Theme',
-          isSwitch: true, // Add a flag to handle the switch
-        ),
-        SizedBox(height: size.height * 0.004),
-        _buildUtilitiesBox(
-          icon: const Icon(IconlyLight.shield_done),
-          title: 'Privacy & Policy',
-        ),
-        SizedBox(height: size.height * 0.004),
-        _buildUtilitiesBox(
-          icon: const Icon(IconlyLight.paper),
-          title: 'Terms & Conditions',
-        ),
-      ],
-    );
-  }
+  // Widget _buildUtilities(BuildContext context) {
+  //   final size = MediaQuery.of(context).size;
+  //   return Column(
+  //     children: [
+  //       _buildUtilitiesBox(
+  //         icon: const Icon(Icons.color_lens_rounded),
+  //         title: 'Theme',
+  //         isSwitch: true, // Add a flag to handle the switch
+  //       ),
+  //       SizedBox(height: size.height * 0.004),
+  //       _buildUtilitiesBox(
+  //         icon: const Icon(IconlyLight.shield_done),
+  //         title: 'Privacy & Policy',
+  //       ),
+  //       SizedBox(height: size.height * 0.004),
+  //       _buildUtilitiesBox(
+  //         icon: const Icon(IconlyLight.paper),
+  //         title: 'Terms & Conditions',
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildUtilitiesBox({
     required Icon icon,
@@ -207,17 +232,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Spacer(), // Pushes the switch to the far right
-            if (isSwitch)
-              Switch(
-                value: _isDarkTheme, // Bind the switch to the state variable
-                onChanged: (bool value) {
-                  setState(() {
-                    _isDarkTheme =
-                        value; // Update the state when the switch is toggled
-                  });
-                },
-              ),
+            // const Spacer(), // Pushes the switch to the far right
+            // if (isSwitch)
+            //   Switch(
+            //     value: _isDarkTheme, // Bind the switch to the state variable
+            //     onChanged: (bool value) {
+            //       setState(() {
+            //         _isDarkTheme =
+            //             value; // Update the state when the switch is toggled
+            //       });
+            //     },
+            //   ),
           ],
         ),
       ),
@@ -403,10 +428,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginPage())); //
+                Navigator.of(context).pop(); //
               },
               child: const Text(
                 'Logout',

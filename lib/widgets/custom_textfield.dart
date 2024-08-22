@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
   final IconData prefixIcon;
   final String hintText;
   final TextEditingController controller;
+  final void Function(String txt)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -13,6 +14,7 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     required this.prefixIcon,
     required this.hintText,
+    this.onChanged,
   });
 
   @override
@@ -28,6 +30,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       width: double.infinity,
       child: TextField(
+        onChanged: widget.onChanged,
+        obscuringCharacter: '*',
         controller: widget.controller,
         obscureText: widget.isPassword ? _obscureText : false,
         decoration: InputDecoration(
