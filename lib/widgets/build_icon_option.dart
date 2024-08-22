@@ -8,7 +8,7 @@ Widget buildIconOption(String imageUrl, String label) {
       Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey[300],
+            color: Colors.grey[200],
             boxShadow: [
               BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
