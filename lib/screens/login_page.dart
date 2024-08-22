@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart'; // static const routeName = "/sign-in-screen";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:plagia_oc/screens/forgot_password_page.dart';
 
 // import '../providers/auth_provider.dart';
 // import '../widgets/build_container.dart';
@@ -76,7 +77,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordPage()));
+                    },
                     child: const Text(
                       'Forgot your password?',
                       style: TextStyle(
@@ -163,7 +170,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey.shade300,
                       child: Image.asset(
-                        'assets/images/google_icon.png',
+                        'assets/images/google.png',
                       ),
                     ),
                   ),
@@ -173,7 +180,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey.shade300,
                       child: Image.asset(
-                        'assets/images/apple_icon.png',
+                        'assets/images/apple_logo.png',
                         color: Colors.black,
                       ),
                     ),

@@ -51,8 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: size.height * 0.022),
             Container(
-              height: 126,
-              width: 126,
+              height: 120,
+              width: 120,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.orange, width: 2),
                 shape: BoxShape.circle,
@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextSpan(
                     text: day,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       offset: const Offset(1.0, -5.0),
                       child: Text(
                         suffix,
-                        textScaleFactor: 0.7,
+                        // textScaleFactor: 0.7,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                         ),
@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   TextSpan(
                     text: ' $formattedDate',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -184,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: Colors.grey.withOpacity(0.45),
+        color: Colors.grey.withOpacity(0.25),
       ),
       height: 58,
       child: Padding(
@@ -298,7 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.grey.withOpacity(0.25),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 4,
             offset: const Offset(0, 2),

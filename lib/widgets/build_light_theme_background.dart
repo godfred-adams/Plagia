@@ -17,7 +17,7 @@ Widget buildLightThemeBackground({
                   const AssetImage('assets/images/ellipses_white_screen.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.7), // Adjust opacity here
+                Colors.white.withOpacity(0.27), // Adjust opacity here
                 BlendMode.dstATop,
               ),
             ),
@@ -34,7 +34,6 @@ Widget buildLightThemeBackground({
     ),
   );
 }
- 
 //import 'package:flutter/material.dart';
 
 // Widget buildLightThemeBackground({
