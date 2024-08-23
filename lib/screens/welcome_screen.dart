@@ -282,13 +282,13 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           MaterialPageRoute(
                               builder: (context) => const PickUploadReadPdf())),
                       child: buildIconOption(
-                          'assets/images/add_file.png', 'Upload Doc.'),
+                          'assets/images/file.png', 'Upload Doc.'),
                     ),
                     GestureDetector(
                       onTap: pickAndRecognizeText,
                       // Navigator.push(context,
                       //     MaterialPageRoute(builder: (context) => const Ocr())),
-                      child: buildIconOption('assets/images/ocr.png', 'OCR'),
+                      child: buildIconOption('assets/images/scan.png', 'OCR'),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
@@ -296,7 +296,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           MaterialPageRoute(
                               builder: (context) => const ParaphrasePage())),
                       child: buildIconOption(
-                          'assets/images/edit_text_file.png', 'Paraphrase'),
+                          'assets/images/writing.png', 'Paraphrase'),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
@@ -304,7 +304,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           MaterialPageRoute(
                               builder: (context) => const VoiceToText())),
                       child: buildIconOption(
-                          'assets/images/speech_bubble.png', 'Speech/Text'),
+                          'assets/images/microphone.png', 'Speech/Text'),
                     ),
                   ],
                 ),

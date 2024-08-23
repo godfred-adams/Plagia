@@ -187,7 +187,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                         child: CircleAvatar(
                           backgroundColor: Colors.grey.shade300,
                           child: Image.asset(
-                            'assets/images/google_icon.png',
+                            'assets/images/google.png',
                           ),
                         ),
                       ),
@@ -197,7 +197,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                         child: CircleAvatar(
                           backgroundColor: Colors.grey.shade300,
                           child: Image.asset(
-                            'assets/images/apple_icon.png',
+                            'assets/images/apple_logo.png',
                             color: Colors.black,
                           ),
                         ),

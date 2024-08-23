@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 // import 'package:flutter/widgets.dart'; // static const routeName = "/sign-in-screen";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
@@ -245,6 +246,16 @@ class _LoginPageState extends ConsumerState<ForgotPasswordScreen> {
             ],
           ),
         ),
+
+
+class ForgotPasswordPage extends StatelessWidget {
+  const ForgotPasswordPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('Forgot Password Page'),
       ),
     );
   }

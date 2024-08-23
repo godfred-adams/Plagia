@@ -25,25 +25,25 @@ class _FeaturesScreenState extends ConsumerState<FeaturesScreen> {
     {
       'title': 'Upload Docuument',
       'subtitle': 'Easily upload documents for analysis',
-      'imageUrl': 'assets/images/add_file.png',
+      'imageUrl': 'assets/images/file.png',
     },
     {
       'title': 'OCR',
       'subtitle':
           'Extract text from images effortlessly.\nPerfect for digitizing printed documents',
-      'imageUrl': 'assets/images/ocr.png',
+      'imageUrl': 'assets/images/scan.png',
     },
     {
       'title': 'Paraphrase',
       'subtitle':
           'Rephrase your text while retaining meaning.\nImprove clarity and avoid redundancy.',
-      'imageUrl': 'assets/images/edit_text_file.png',
+      'imageUrl': 'assets/images/writing.png',
     },
     {
       'title': 'Speech/Text',
       'subtitle':
           'Convert speech into editable text.\nIdeal for creating notes and documents.',
-      'imageUrl': 'assets/images/speech_bubble.png',
+      'imageUrl': 'assets/images/microphone.png',
     },
   ];
 
@@ -249,8 +249,8 @@ class _FeaturesScreenState extends ConsumerState<FeaturesScreen> {
         ),
         height: 82,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          const SizedBox(width: 6),
-          Image.asset(imageUrl),
+          const SizedBox(width: 15),
+          Image.asset(imageUrl, height: 55, width: 55),
           const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
