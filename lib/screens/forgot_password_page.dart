@@ -42,7 +42,7 @@ class _LoginPageState extends ConsumerState<ForgotPasswordScreen> {
                 'Forgot Password? ',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 30,
+                    fontSize: 30.0,
                     color: Colors.orange),
               ),
               const SizedBox(height: 8),
@@ -246,7 +246,10 @@ class _LoginPageState extends ConsumerState<ForgotPasswordScreen> {
             ],
           ),
         ),
-
+      ),
+    );
+  }
+}
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});

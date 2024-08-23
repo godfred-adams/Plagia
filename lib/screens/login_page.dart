@@ -80,14 +80,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-
-                                  const ForgotPasswordScreen()));
-
-                                  const ForgotPasswordPage()));
-
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ForgotPasswordScreen(),
+                        ),
+                      );
+                      const ForgotPasswordPage();
                     },
                     child: const Text(
                       'Forgot your password?',
@@ -192,7 +190,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
