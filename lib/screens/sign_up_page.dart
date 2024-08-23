@@ -148,9 +148,8 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                     controller: confirmPasswordController,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 32,
                   ),
-                  const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     height: 55,

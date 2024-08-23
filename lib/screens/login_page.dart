@@ -9,6 +9,7 @@ import 'package:plagia_oc/screens/forgot_password_page.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/build_light_theme_background.dart';
 import '../widgets/custom_textfield.dart';
+import 'forgot_password_page.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -82,7 +83,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
+
+                                  const ForgotPasswordScreen()));
+
                                   const ForgotPasswordPage()));
+
                     },
                     child: const Text(
                       'Forgot your password?',
