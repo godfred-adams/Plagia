@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plagia_oc/screens/features_screen.dart';
 import 'package:plagia_oc/screens/login_page.dart';
 import 'package:plagia_oc/screens/sign_up_page.dart';
-import 'package:plagia_oc/screens/welcome_screen.dart';
+import 'package:plagia_oc/screens/home_screen.dart';
 
 Route<dynamic> onGenerateRoute(
   RouteSettings settings,

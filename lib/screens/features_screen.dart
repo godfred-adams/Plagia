@@ -4,7 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:plagia_oc/bottom_nav_bar.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 
-import '../utils/navigation_provider.dart';
+import '../../../utils/navigation_provider.dart';
 import '../widgets/build_icon_option.dart';
 import '../widgets/build_modified_document_list.dart';
 import 'ocr.dart';

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:plagia_oc/screens/texteditor.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 import 'package:plagia_oc/widgets/build_modified_document_list.dart';
 
-import '../utils/navigation_provider.dart';
+import '../../../utils/navigation_provider.dart';
 
 // Define a StateProvider for the search query
 final searchQueryProvider = StateProvider<String>((ref) => '');
@@ -82,7 +83,13 @@ class FilesScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final file = filteredFilesList[index];
                 final fileName = 'File $file'; // Example file name
-                return buildModifiedDocumentList();
+                return GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => QuillEditorExample())),
+                    child:
+                        buildModifiedDocumentList(date: null, filename: null));
                 // fileName, '1.5 MB - 13 January 2024, 17:00', searchQuery);
               },
             ),

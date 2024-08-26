@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:plagia_oc/screens/welcome_screen.dart';
+import 'package:plagia_oc/screens/splash_screen.dart';
+import 'package:plagia_oc/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_nav_bar.dart';
 import 'firebase_options.dart';
@@ -37,7 +38,20 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
         primaryColor: Colors.orange,
       ),
-      home: const MyBottomNavigation(),
+      home: FutureBuilder(
+        future: checkLoginStatus(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return const MyBottomNavigation();
+          } else {
+            return const SplashScreen();
+          }
+        },
+      ),
       // const Center(
       //   child: Text('data'),
       // ),
@@ -49,22 +63,5 @@ class MyApp extends ConsumerWidget {
 
 Future<bool> checkLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('isAthenticated') ?? false;
+  return prefs.getBool('isAuthenticated') ?? false;
 }
-
-
-//  FutureBuilder(
-//           future: checkLoginStatus(),
-//           builder: (context, snapshot) {
-//             if (snapshot.connectionState == ConnectionState.waiting) {
-//               return const Center(
-//                 child: CircularProgressIndicator(),
-//               );
-//             } else if (snapshot.hasData && snapshot.data == true) {
-//               return const WelcomeScreen();
-//             } else if (!snapshot.hasData && snapshot.data == false) {
-//               return const WelcomeScreen();
-//             } else {
-//               return const WelcomeScreen();
-//             }
-//           })
