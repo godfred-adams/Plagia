@@ -5,8 +5,8 @@ import 'package:iconly/iconly.dart';
 import 'screens/features_screen.dart';
 import 'screens/files_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/welcome_screen.dart';
-import 'utils/navigation_provider.dart';
+import 'screens/home_screen.dart';
+import '../../utils/navigation_provider.dart';
 
 class MyBottomNavigation extends ConsumerWidget {
   const MyBottomNavigation({super.key});

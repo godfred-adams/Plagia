@@ -1,7 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:plagia_oc/utils/pickimag.dart';
+import '../../../utils/pickimag.dart';
 import 'package:plagia_oc/widgets/snacbar.dart';
 
 import '../widgets/build_light_theme_background.dart';
@@ -15,7 +15,6 @@ class Ocr extends StatefulWidget {
 
 class _OcrState extends State<Ocr> {
   PlagiaModel plagiaModel = PlagiaModel();
-
   void pickAndRecognizeText() async {
     try {
       await plagiaModel.getImage(context: context);

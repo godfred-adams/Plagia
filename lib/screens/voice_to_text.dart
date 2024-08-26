@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class VoiceToText extends StatefulWidget {
   const VoiceToText({super.key});
@@ -17,6 +18,8 @@ class _VoiceToTextState extends State<VoiceToText>
   bool _speechEnabled = false;
   String _wordsSpoken = "";
   double _confidenceLevel = 0;
+  final quill.QuillController _inputController = quill.QuillController.basic(
+      configurations: const quill.QuillControllerConfigurations());
 
   late AnimationController _animationController;
   late Animation<double> _animation1;
@@ -90,302 +93,201 @@ class _VoiceToTextState extends State<VoiceToText>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 44),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.orange),
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.30),
-                const Text(
-                  'Dictate',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 44),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon:
+                        const Icon(Icons.arrow_back_ios, color: Colors.orange),
                   ),
-                ),
-                const Spacer(),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                _isListening
-                    ? "Listening... Press again to stop."
-                    : _speechEnabled
-                        ? "Tap the microphone to start listening..."
-                        : "Speech not available",
-                style: const TextStyle(fontSize: 20.0),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.30),
+                  const Text(
+                    'Dictate',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  height: size.height * 0.46,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1),
-                    borderRadius: BorderRadius.circular(8),
+
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    quill.QuillSimpleToolbar(
+                      controller: _inputController,
+                      configurations:
+                          const quill.QuillSimpleToolbarConfigurations(
+                        showSuperscript: false,
+                        showSubscript: false,
+                        showFontSize: false,
+                        showFontFamily: false,
+                        showStrikeThrough: false,
+                        showInlineCode: false,
+                        showBackgroundColorButton: false,
+                        showClearFormat: false,
+                        showHeaderStyle: false,
+                        showColorButton: false,
+                        showListCheck: false,
+                        showQuote: false,
+                        showCodeBlock: false,
+                        showIndent: false,
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.44,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 14),
+                          Text(
+                            _isListening
+                                ? "Listening... Press again to stop."
+                                : _speechEnabled
+                                    ? "Tap the microphone to start listening..."
+                                    : "Speech not available",
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                          const Divider(),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Container(
+                                height: size.height * 0.50,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  // border: Border.all(width: 1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                // padding: const EdgeInsets.all(16),
+                                child: Text(
+                                  _wordsSpoken,
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // child:
+                      // quill.QuillEditor.basic(
+                      //   controller: _inputController,
+                      // ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 36),
+
+              // Container(
+              //   padding: const EdgeInsets.all(16),
+              // child: Text(
+              //   _isListening
+              //       ? "Listening... Press again to stop."
+              //       : _speechEnabled
+              //           ? "Tap the microphone to start listening..."
+              //           : "Speech not available",
+              //   style: const TextStyle(fontSize: 20.0),
+              // ),
+              // ),
+              // Expanded(
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(16.0),
+              //     child: Container(
+              //       height: size.height * 0.46,
+              //       width: double.infinity,
+              //       decoration: BoxDecoration(
+              //         border: Border.all(width: 1),
+              //         borderRadius: BorderRadius.circular(8),
+              //       ),
+              //       padding: const EdgeInsets.all(16),
+              //       child: Text(
+              //         _wordsSpoken,
+              //         style: const TextStyle(
+              //           fontSize: 25,
+              //           fontWeight: FontWeight.w300,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              if (!_isListening && _confidenceLevel > 0)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 100,
                   ),
-                  padding: const EdgeInsets.all(16),
                   child: Text(
-                    _wordsSpoken,
+                    "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
                     style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w300,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w200,
                     ),
                   ),
                 ),
-              ),
-            ),
-            if (!_isListening && _confidenceLevel > 0)
-              Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 100,
-                ),
-                child: Text(
-                  "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w200,
+              Positioned(
+                bottom: size.height * 0.08,
+                child: GestureDetector(
+                  onTap: _toggleListening,
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Outer Circle (Largest)
+                          ScaleTransition(
+                            scale: _animation2,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.orange.withOpacity(0.2),
+                              radius: 78,
+                            ),
+                          ),
+                          // Middle Circle
+                          ScaleTransition(
+                            scale: _animation1,
+                            child: CircleAvatar(
+                              radius: 62,
+                              backgroundColor: Colors.orange.withOpacity(0.4),
+                            ),
+                          ),
+                          // Inner Circle (Smallest, containing the mic image)
+                          CircleAvatar(
+                            backgroundColor: Colors.orange,
+                            radius: 48,
+                            child: Center(
+                              child: Image.asset(
+                                'assets/images/mic.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
-            Positioned(
-              bottom: size.height * 0.08,
-              child: GestureDetector(
-                onTap: _toggleListening,
-                child: AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Outer Circle (Largest)
-                        ScaleTransition(
-                          scale: _animation2,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.orange.withOpacity(0.2),
-                            radius: 78,
-                          ),
-                        ),
-                        // Middle Circle
-                        ScaleTransition(
-                          scale: _animation1,
-                          child: CircleAvatar(
-                            radius: 62,
-                            backgroundColor: Colors.orange.withOpacity(0.4),
-                          ),
-                        ),
-                        // Inner Circle (Smallest, containing the mic image)
-                        CircleAvatar(
-                          backgroundColor: Colors.orange,
-                          radius: 48,
-                          child: Center(
-                            child: Image.asset(
-                              'assets/images/mic.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
-            SizedBox(height: size.height * 0.03),
-          ],
+              SizedBox(height: size.height * 0.03),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-
-
-//import 'package:flutter/material.dart';
-// import 'package:flutter_quill/flutter_quill.dart';
-// import 'package:speech_to_text/speech_to_text.dart';
-
-// class VoiceToText extends StatefulWidget {
-//   const VoiceToText({super.key});
-
-//   @override
-//   State<VoiceToText> createState() => _VoiceToTextState();
-// }
-
-// class _VoiceToTextState extends State<VoiceToText> {
-//   final SpeechToText _speechToText = SpeechToText();
-//   QuillController _controller = QuillController.basic();
-
-//   bool _speechEnabled = false;
-//   String _wordsSpoken = "";
-//   double _confidenceLevel = 0;
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _controller.dispose();
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     initSpeech();
-//   }
-
-//   void initSpeech() async {
-//     _speechEnabled = await _speechToText.initialize();
-//     setState(() {});
-//   }
-
-//   void _startListening() async {
-//     await _speechToText.listen(onResult: _onSpeechResult);
-//     setState(() {
-//       _confidenceLevel = 0;
-//     });
-//   }
-
-//   void _stopListening() async {
-//     await _speechToText.stop();
-//     setState(() {});
-//   }
-
-//   void _onSpeechResult(result) {
-//     setState(() {
-//       _wordsSpoken = "${result.recognizedWords}";
-//       _confidenceLevel = result.confidence;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-//     return Scaffold(
-//       // appBar: AppBar(
-//       //   centerTitle: true,
-//       //   backgroundColor: Colors.transparent,
-//       //   title: const Text(
-//       //     'Dictate',
-//       //     style: TextStyle(
-//       //       fontWeight: FontWeight.bold,
-//       //       fontSize: 18,
-//       //     ),
-//       //   ),
-//       // ),
-//       body: Center(
-//         child: Column(
-//           children: [
-//             const SizedBox(height: 44),
-//             Row(
-//               children: [
-//                 IconButton(
-//                     onPressed: () {
-//                       Navigator.pop(context);
-//                     },
-//                     icon:
-//                         const Icon(Icons.arrow_back_ios, color: Colors.orange)),
-//                 SizedBox(width: MediaQuery.of(context).size.width * 0.30),
-//                 const Text(
-//                   'Dictate',
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 24,
-//                   ),
-//                 ),
-//                 const Spacer(),
-//               ],
-//             ),
-//             Container(
-//               padding: const EdgeInsets.all(16),
-//               child: Text(
-//                 _speechToText.isListening
-//                     ? "listening..."
-//                     : _speechEnabled
-//                         ? "Tap the microphone to start listening..."
-//                         : "Speech not available",
-//                 style: const TextStyle(fontSize: 20.0),
-//               ),
-//             ),
-//             Expanded(
-//               child: Padding(
-//                 padding: const EdgeInsets.all(16.0),
-//                 child: Container(
-//                   height: size.height * 0.46,
-//                   width: double.infinity,
-//                   decoration: BoxDecoration(
-//                     border: Border.all(width: 1),
-//                     borderRadius: BorderRadius.circular(2),
-//                   ),
-//                   padding: const EdgeInsets.all(16),
-//                   child: Text(
-//                     _wordsSpoken,
-//                     style: const TextStyle(
-//                       fontSize: 25,
-//                       fontWeight: FontWeight.w300,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             if (_speechToText.isNotListening && _confidenceLevel > 0)
-//               Padding(
-//                 padding: const EdgeInsets.only(
-//                   bottom: 100,
-//                 ),
-//                 child: Text(
-//                   "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-//                   style: const TextStyle(
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.w200,
-//                   ),
-//                 ),
-//               ),
-//             Positioned(
-//                 bottom: size.height * 0.08,
-//                 child: GestureDetector(
-//                   onTap: _speechToText.isListening
-//                       ? _stopListening
-//                       : _startListening,
-//                   child: CircleAvatar(
-//                     backgroundColor: Colors.orange.withOpacity(0.2),
-//                     radius: 82,
-//                     child: CircleAvatar(
-//                       radius: 68,
-//                       backgroundColor: Colors.orange.withOpacity(0.4),
-//                       child: CircleAvatar(
-//                         backgroundColor: Colors.orange,
-//                         radius: 54,
-//                         child: Center(
-//                           child: Image.asset('assets/images/mic.png', 
-                          
-//                               fit: BoxFit.cover),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 )),
-//             SizedBox(height: size.height * 0.03),
-//           ],
-//         ),
-//       ),
-//       // floatingActionButton: FloatingActionButton(
-//       //   onPressed: _speechToText.isListening ? _stopListening : _startListening,
-//       //   tooltip: 'Listen',
-//       //   backgroundColor: Colors.red,
-//       //   child: Icon(
-//       //     _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-//       //     color: Colors.white,
-//       //   ),
-//       // ),
-//     );
-//   }
-// }

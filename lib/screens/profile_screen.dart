@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
+import '../../../utils/user_provider.dart';
+import '../../../utils/usermodel.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 
 import 'edit_password_page.dart';
 import 'login_page.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool isLoading = false;
+  UserModel? user;
+
+  Future<void> loadUser() async {
+    final loadedUser = await ref.read(userProvider.notifier).loadUser();
+    debugPrint(loadedUser.toString());
+    setState(() {
+      user = loadedUser;
+    });
+    print(user);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   FocusScope.of(context).unfocus();
+    // });
+  }
+
   String getDaySuffix(String day) {
     if (day.endsWith('1') && day != '11') {
       return 'st';
@@ -92,7 +116,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Text(
                         suffix,
 
-
                         // textScaleFactor: 0.7,
 
                         style: const TextStyle(
@@ -141,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             SizedBox(height: size.height * 0.008),
-            _buildPersonalInfo(context),
+            _buildPersonalInfo(context, user!),
             SizedBox(height: size.height * 0.032),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -228,16 +251,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildPersonalInfo(BuildContext context) {
+  Widget _buildPersonalInfo(BuildContext context, UserModel user) {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
         _buildPersonalInfoBox(
           0,
-          const Icon(IconlyBroken.profile),
+          Icon(IconlyBroken.profile),
           'Name',
-          const Text(
-            'John Doe',
+          Text(
+            user.name,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -248,8 +271,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           1,
           const Icon(IconlyBroken.message),
           'Email',
-          const Text(
-            'johndoe@gmail.com',
+          Text(
+            user.email,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -406,11 +429,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final loadedUser = ref.read(userProvider.notifier);
+                await loadedUser.clearUser();
+                Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginPage())); //
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (Route<dynamic> route) => false);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => const LoginPage())); //
               },
               child: const Text(
                 'Logout',

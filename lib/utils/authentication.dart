@@ -1,127 +1,117 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:doctor/widgets/snaackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'usermodel.dart';
+import 'package:plagia_oc/widgets/snacbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:plagia_oc/screens/welcome_screen.dart';
-import 'package:plagia_oc/utils/usermodel.dart';
-import '../widgets/snacbar.dart';
 
-// StateNotifier to handle user authentication
-class Authentication extends StateNotifier<UserModel?> {
+class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Ref ref;
-
-  Authentication(this.ref) : super(null) {
-    _loadUserFromPreferences(); // Load user data on initialization
-  }
-
-  // Save user data to SharedPreferences
+  final FirebaseFirestore _firestorage = FirebaseFirestore.instance;
+  static bool isLoading = false;
+  Stream<User?> get authChanges => _auth.authStateChanges();
+  User get user => _auth.currentUser!;
   Future<void> _saveUserToPreferences(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('user', user.toJson());
-    state = user;
+    // state = user;
   }
 
-  // Load user data from SharedPreferences
-  Future<void> _loadUserFromPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
-    if (userJson != null) {
-      state = UserModel.fromJson(userJson);
-    }
-  }
-
-  // Clear user data from SharedPreferences
-  Future<void> _clearUserFromPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('user');
-  }
-
-  // Get user details from Firestore
   Future<UserModel> getUserDetails() async {
-    DocumentSnapshot snapshot =
-        await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+    DocumentSnapshot snapshot = await _firestorage
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .get();
+
     return UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
   // Sign up method
-  Future<void> signUp({
+  Future<String> signUp({
     required String name,
     required String email,
     required String password,
     required BuildContext context,
   }) async {
+    String result = 'Some error occured';
+
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
       if (credential.user != null) {
-        UserModel user =
-            UserModel(email: email, uid: credential.user!.uid, name: name);
-        await _firestore
-            .collection('users')
-            .doc(credential.user!.uid)
-            .set(user.toMap());
+        UserModel user = UserModel(
+          email: email,
+          // badgeNumber: badgeNumber,
+          uid: credential.user!.uid,
+          name: name,
+        );
+
+        await _firestorage.collection('users').doc(credential.user!.uid).set(
+              user.toMap(),
+            );
+
         await credential.user!.sendEmailVerification();
         showSnackBar(
             context: context,
             txt:
-                "Email verification sent to your email account, check and verify");
-        state = user;
+                "Email verification sent to your email account check and verify");
       }
+      result = 'Successful';
+      debugPrint(result);
     } catch (err) {
-      showSnackBar(context: context, txt: err.toString());
+      result = err.toString();
+      final String error = getErrorMessage(err.toString());
+      showSnackBar(context: context, txt: error);
+      debugPrint(err.toString());
     }
+
+    return result;
   }
 
-  // Login method
-  Future<void> loginUser({
-    required String email,
-    required String password,
-    required BuildContext context,
-  }) async {
-    if (email.isEmpty || password.isEmpty) {
-      showSnackBar(context: context, txt: 'Please enter your credentials');
-      return;
-    }
+  Future<bool> loginUser(
+      String password, String email, BuildContext context) async {
+    bool result = false;
     try {
       UserCredential credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      await credential.user!.reload();
+      credential.user!.reload();
 
+      // debugPrint(credential.user as String?);
       if (!credential.user!.emailVerified) {
         showSnackBar(context: context, txt: "Please verify your email account");
-        return;
+        return false;
       }
 
       if (credential.user != null && credential.user!.emailVerified) {
         UserModel user = await getUserDetails();
-        state = user;
+        // state = user;
         _saveUserToPreferences(user);
 
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setBool("isAuthenticated", true);
-        Navigator.pushNamedAndRemoveUntil(
-            context, WelcomeScreen.routeName, (T) => false);
+        result = true;
       } else {
         showSnackBar(context: context, txt: "Please verify your email");
+        result = false;
       }
-    } on FirebaseAuthException catch (err) {
-      print(err);
-      showSnackBar(context: context, txt: err.toString());
+    } on FirebaseAuthException {
+      throw Exception;
     } catch (err) {
-      showSnackBar(context: context, txt: err.toString());
+      result = false;
+
+      debugPrint(" err.toString() ${err.toString()}");
     }
+
+    return result;
   }
 
-  // Sign out method
-  Future<void> signOut() async {
-    await _auth.signOut();
-    state = null;
-    _clearUserFromPreferences(); // Clear user from preferences
+  signOut() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setBool("isAuthenticated", false);
+    await pref.remove("user");
+    _auth.signOut();
   }
 }

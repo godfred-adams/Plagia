@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275336604635",
+    "project_id": "plagia-4c645",
+    "storage_bucket": "plagia-4c645.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275336604635:android:1cb869554428432924d5fe",
+        "android_client_info": {
+          "package_name": "com.example.plagia_oc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByEFKZSbC13cKawIXtz_bMJ2TZwgAJ4Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

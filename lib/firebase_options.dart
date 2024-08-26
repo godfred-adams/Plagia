@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBe6dvo6MPYJlCL-e93T2MHj_fipgvoHaQ',
-    appId: '1:210627469869:web:8f70bf79ec2098c93e4ea4',
-    messagingSenderId: '210627469869',
-    projectId: 'plagia-5a96c',
-    authDomain: 'plagia-5a96c.firebaseapp.com',
-    storageBucket: 'plagia-5a96c.appspot.com',
+    apiKey: 'AIzaSyB3P1NuEbGFXFASFmj4ddyUfeCNBmnUCTA',
+    appId: '1:275336604635:web:8536a83c2656f3f424d5fe',
+    messagingSenderId: '275336604635',
+    projectId: 'plagia-4c645',
+    authDomain: 'plagia-4c645.firebaseapp.com',
+    storageBucket: 'plagia-4c645.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB89qE_-WByYpUTZ6ji1cz31z1HaAQNCGw',
-    appId: '1:210627469869:android:fbb86cd115941ff13e4ea4',
-    messagingSenderId: '210627469869',
-    projectId: 'plagia-5a96c',
-    storageBucket: 'plagia-5a96c.appspot.com',
+    apiKey: 'AIzaSyByEFKZSbC13cKawIXtz_bMJ2TZwgAJ4Z4',
+    appId: '1:275336604635:android:1cb869554428432924d5fe',
+    messagingSenderId: '275336604635',
+    projectId: 'plagia-4c645',
+    storageBucket: 'plagia-4c645.appspot.com',
   );
+
 }

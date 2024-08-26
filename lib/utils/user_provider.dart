@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plagia_oc/utils/usermodel.dart';
+import 'usermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final userProvider =
@@ -30,6 +29,7 @@ class UserNotifier extends StateNotifier<UserModel?> {
   Future<void> clearUser() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user');
+    await prefs.remove('isAuthenticated');
     state = null;
   }
 }

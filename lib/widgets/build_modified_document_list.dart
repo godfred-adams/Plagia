@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildModifiedDocumentList() {
+Widget buildModifiedDocumentList({required filename, required date}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 8),
     child: Container(

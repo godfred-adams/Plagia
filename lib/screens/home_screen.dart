@@ -10,15 +10,15 @@ import 'package:iconly/iconly.dart';
 import 'package:plagia_oc/screens/paraphrase_page.dart';
 import 'package:plagia_oc/screens/pdf_test_page.dart';
 import 'package:plagia_oc/screens/voice_to_text.dart';
-import 'package:plagia_oc/utils/pickimag.dart';
-import 'package:plagia_oc/utils/user_provider.dart';
+import '../../../utils/pickimag.dart';
+import '../../../utils/user_provider.dart';
 
-import 'package:plagia_oc/utils/usermodel.dart';
+import '../../../utils/usermodel.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 
 import '../providers/auth_provider.dart';
 
-import '../utils/navigation_provider.dart';
+import '../../../utils/navigation_provider.dart';
 import '../widgets/build_icon_option.dart';
 import '../widgets/build_modified_document_list.dart';
 import '../widgets/snacbar.dart';
@@ -48,7 +48,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    // loadUser();
+    loadUser();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   FocusScope.of(context).unfocus();
     // });
@@ -115,14 +115,14 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           ),
                         ])),
                     GestureDetector(
-                      onTap: () async {
-                        await ref.watch(authProvider.notifier).signOut();
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          LoginPage.routeName,
-                          (T) => false,
-                        );
-                      },
+                      onTap: () {},
+                      // async {
+                      //   Navigator.pushNamedAndRemoveUntil(
+                      //     context,
+                      //     LoginPage.routeName,
+                      //     (T) => false,
+                      //   );
+                      // },
                       child: const CircleAvatar(
                         radius: 24,
                         backgroundImage: AssetImage('assets/images/per.png'),
@@ -329,10 +329,10 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     // physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        buildModifiedDocumentList(),
-                        buildModifiedDocumentList(),
-                        buildModifiedDocumentList(),
-                        buildModifiedDocumentList(),
+                        buildModifiedDocumentList(date: null, filename: null),
+                        buildModifiedDocumentList(date: null, filename: null),
+                        buildModifiedDocumentList(date: null, filename: null),
+                        buildModifiedDocumentList(date: null, filename: null),
                       ],
                     ),
                   ),

@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import '../../../utils/authentication.dart';
 
-import '../providers/auth_provider.dart';
+// import '../providers/auth_provider.dart';
 
 import '../widgets/build_light_theme_background.dart';
 import '../widgets/custom_textfield.dart';
@@ -19,6 +20,7 @@ class SignUpPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<SignUpPage> {
+  Authentication authentication = Authentication();
   bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -26,43 +28,25 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
   TextEditingController confirmPasswordController = TextEditingController();
 
   void signUp() async {
-    String name = nameController.text.trim();
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-    String confirmPassword = confirmPasswordController.text.trim();
-
-    // Check for empty fields and matching passwords
-    if (name.isNotEmpty &&
-        email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirmPassword.isNotEmpty &&
-        password == confirmPassword) {
-      // Check if name contains only letters
-      final namePattern = RegExp(r'^[a-zA-Z\s]+$');
-      if (!namePattern.hasMatch(name)) {
-        showSnackBar(
-            context: context, txt: "Please enter a name with letters only.");
-        return;
-      }
-
+    print("sign up ......");
+    if (emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty &&
+        nameController.text.trim().isNotEmpty &&
+        confirmPasswordController.text.trim().isNotEmpty) {
       try {
         setState(() {
           isLoading = true;
         });
-        final authNotifier = ref.watch(authProvider.notifier);
-        await authNotifier.signUp(
-            name: name, email: email, password: password, context: context);
-
-        showSnackBar(
-            context: context,
-            txt: 'Successful sign up \n Login with the same credentials');
-        emailController.text = "";
-        passwordController.text = "";
-        nameController.text = "";
-        confirmPasswordController.text = "";
-        setState(() {});
-        Navigator.pushNamed(context, LoginPage.routeName);
-
+        final res = await authentication.signUp(
+            name: nameController.text.trim(),
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+            context: context);
+        if (res == "Successful") {
+          showSnackBar(
+              context: context,
+              txt: 'Successful sign up \n login with the same credentials');
+        }
         setState(() {
           isLoading = false;
         });
@@ -75,7 +59,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
     } else {
       showSnackBar(
           context: context,
-          txt: "Something went wrong, check your credentials.");
+          txt: "Something went wrong check your credentials well");
     }
   }
 

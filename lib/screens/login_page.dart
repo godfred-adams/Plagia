@@ -1,15 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart'; // static const routeName = "/sign-in-screen";
+// static const routeName = "/sign-in-screen";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:plagia_oc/bottom_nav_bar.dart';
 import 'package:plagia_oc/screens/forgot_password_page.dart';
+import '../../../utils/authentication.dart';
+import 'package:plagia_oc/widgets/snacbar.dart';
 
 // import '../providers/auth_provider.dart';
 // import '../widgets/build_container.dart';
-import '../providers/auth_provider.dart';
+
 import '../widgets/build_light_theme_background.dart';
 import '../widgets/custom_textfield.dart';
-import 'forgot_password_page.dart';
+
 import 'sign_up_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -20,14 +25,52 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  TextEditingController emailController =
-      TextEditingController(text: "agyinjohn100@gmail.com");
-  TextEditingController passwordController =
-      TextEditingController(text: "UZZIAHPOP");
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  Authentication authentication = Authentication();
+
+  void login() async {
+    try {
+      if (emailController.text.trim().isNotEmpty &&
+          passwordController.text.trim().isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        final res = await authentication.loginUser(
+            passwordController.text.trim(),
+            emailController.text.trim(),
+            context);
+        if (res) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyBottomNavigation(),
+              ));
+          // Navigator.pushAndRemoveUntil(
+          // context, MaterialPageRoute(builder: (context)=> MyBottomNavigation(), Route<dynamic> route) => condition, ));
+        } else {
+          showSnackBar(
+              context: context,
+              txt: "Something went wrong check and try again");
+        }
+      } else {
+        showSnackBar(context: context, txt: "Fill the fields");
+        return;
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (er) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(context: context, txt: er.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authNotifier = ref.read(authProvider.notifier);
     final size = MediaQuery.of(context).size;
     return buildLightThemeBackground(
       mainWidget: Center(
@@ -113,16 +156,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   onPressed: isLoading
                       ? () {}
                       : () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          await authNotifier.loginUser(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                              context: context);
-                          setState(() {
-                            isLoading = false;
-                          });
+                          login();
                         },
                   child: isLoading
                       ? const Center(
