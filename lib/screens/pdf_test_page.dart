@@ -102,12 +102,12 @@ class PickUploadReadPdfState extends ConsumerState<PickUploadReadPdf> {
   }
 
   Future<void> savePdfMetadata(String downloadURL, String fileName) async {
-    CollectionReference pdfs = FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('pdfs')
         .doc(user!.uid)
-        .collection("pdf");
-
-    await pdfs.add({
+        .collection('pdf')
+        .doc(fileName)
+        .set({
       'url': downloadURL,
       'fileName': fileName,
       'uploadedAt': Timestamp.now(),

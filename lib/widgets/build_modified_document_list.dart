@@ -1,5 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+
+Future<void> deletePdf(String fileName) async {
+  try {
+    // Delete the file from Firebase Storage
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('pdfs/$fileName');
+    await storageReference.delete();
+    print('File deleted from storage.');
+
+    // Delete the document reference from Firestore
+    await FirebaseFirestore.instance
+        .collection('pdfs')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('pdf')
+        .doc(fileName)
+        .delete();
+    print('Document deleted from Firestore.');
+  } catch (e) {
+    print('Error deleting file: $e');
+  }
+}
 
 Widget buildModifiedDocumentList(
     {required filename, required date, required BuildContext context}) {
@@ -43,7 +67,7 @@ Widget buildModifiedDocumentList(
             const Spacer(),
             GestureDetector(
               onTap: () {
-                _showDeleteConfirmationDialog(context);
+                _showDeleteConfirmationDialog(context, filename);
               },
               child: const Icon(
                 IconlyBold.delete,
@@ -56,7 +80,7 @@ Widget buildModifiedDocumentList(
   );
 }
 
-void _showDeleteConfirmationDialog(context) {
+void _showDeleteConfirmationDialog(context, filename) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -98,11 +122,17 @@ void _showDeleteConfirmationDialog(context) {
             onPressed: () {
               //         builder: (context) => const LoginPage())); //
             },
-            child: const Text(
-              'Confirm',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+            child: InkWell(
+              onTap: () async {
+                await deletePdf(filename);
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Confirm',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
