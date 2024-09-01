@@ -36,17 +36,28 @@ class UploadedFilesPage extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
-                      buildModifiedDocumentList(date: null, filename: null),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
+                      buildModifiedDocumentList(
+                          date: null, filename: null, context: context),
                     ],
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -9,20 +11,22 @@ import 'package:iconly/iconly.dart';
 // import 'package:plagia_oc/screens/ocr.dart';
 import 'package:plagia_oc/screens/paraphrase_page.dart';
 import 'package:plagia_oc/screens/pdf_test_page.dart';
+import 'package:plagia_oc/screens/read_online_pdf.dart';
 import 'package:plagia_oc/screens/voice_to_text.dart';
+import 'package:plagia_oc/widgets/build_modified_document_list.dart';
 import '../../../utils/pickimag.dart';
 import '../../../utils/user_provider.dart';
 
 import '../../../utils/usermodel.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 
-import '../providers/auth_provider.dart';
+// import '../providers/auth_provider.dart';
 
 import '../../../utils/navigation_provider.dart';
 import '../widgets/build_icon_option.dart';
-import '../widgets/build_modified_document_list.dart';
+// import '../widgets/build_modified_document_list.dart';
 import '../widgets/snacbar.dart';
-import 'login_page.dart';
+// import 'login_page.dart';
 
 class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
@@ -35,12 +39,16 @@ class WelcomeScreen extends ConsumerStatefulWidget {
 class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   bool isLoading = false;
   UserModel? user;
-
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   Future<void> loadUser() async {
+    setState(() {
+      isLoading = true;
+    });
     final loadedUser = await ref.read(userProvider.notifier).loadUser();
     debugPrint(loadedUser.toString());
     setState(() {
       user = loadedUser;
+      isLoading = false;
     });
     print(user);
   }
@@ -49,9 +57,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   void initState() {
     super.initState();
     loadUser();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   FocusScope.of(context).unfocus();
-    // });
   }
 
   String? filePath;
@@ -87,258 +92,313 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     // final userDetailsAsyncValue = ref.watch(userDetailsProvider);
     final size = MediaQuery.of(context).size;
 
-    return buildLightThemeBackground(
-      mainWidget: isLoading
-          ? const Center(
-              child: CircularProgressIndicator.adaptive(),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RichText(
-                        text: const TextSpan(
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24.0),
-                            children: [
-                          TextSpan(
-                            text: 'Plagio',
-                            style: TextStyle(
-                              color: Color(0xFF333333),
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : buildLightThemeBackground(
+            mainWidget: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                              text: const TextSpan(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24.0),
+                                  children: [
+                                TextSpan(
+                                  text: 'Plagio',
+                                  style: TextStyle(
+                                    color: Color(0xFF333333),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Scope',
+                                  style: TextStyle(color: Colors.orange),
+                                ),
+                              ])),
+                          GestureDetector(
+                            onTap: () {},
+                            // async {
+                            //   Navigator.pushNamedAndRemoveUntil(
+                            //     context,
+                            //     LoginPage.routeName,
+                            //     (T) => false,
+                            //   );
+                            // },
+                            child: const CircleAvatar(
+                              radius: 24,
+                              backgroundImage:
+                                  AssetImage('assets/images/profile_icon.png'),
                             ),
                           ),
-                          TextSpan(
-                            text: 'Scope',
-                            style: TextStyle(color: Colors.orange),
-                          ),
-                        ])),
-                    GestureDetector(
-                      onTap: () {},
-                      // async {
-                      //   Navigator.pushNamedAndRemoveUntil(
-                      //     context,
-                      //     LoginPage.routeName,
-                      //     (T) => false,
-                      //   );
-                      // },
-                      child: const CircleAvatar(
-                        radius: 24,
-                        backgroundImage: AssetImage('assets/images/per.png'),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                if (user != null) ...[
-                  Text(
-                    'Welcome, ${user!.name}!',
-                    style: const TextStyle(
-                      color: Color(0xFF333333),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                ] else ...[
-                  const Text(
-                    'Loading user data...',
-                    style: TextStyle(
-                      color: Color(0xFF333333),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                ],
-                SizedBox(height: size.height * 0.012),
-                Container(
-                  width: double.infinity,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/images/card-pattern.jpg',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 180,
+                      if (user != null) ...[
+                        Text(
+                          'Welcome, ${user!.name}!',
+                          style: const TextStyle(
+                            color: Color(0xFF333333),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 180,
-                          color: const Color(0xFF276817).withOpacity(0.9),
+                      ] else ...[
+                        const Text(
+                          'Loading user data...',
+                          style: TextStyle(
+                            color: Color(0xFF333333),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      ],
+                      SizedBox(height: size.height * 0.012),
+                      Container(
+                        width: double.infinity,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Stack(
                             children: [
-                              const Text(
-                                'Ensure originality with ease',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                              Image.asset(
+                                'assets/images/card-pattern.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 180,
                               ),
-                              // const Spacer(),
-                              SizedBox(height: size.height * 0.015),
-
-                              RichText(
-                                text: TextSpan(
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 14,
-                                  ),
+                              Container(
+                                width: double.infinity,
+                                height: 180,
+                                color: const Color(0xFF276817).withOpacity(0.9),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextSpan(
-                                      text: 'Welcome to Plagio',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.normal,
+                                    const Text(
+                                      'Ensure originality with ease',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    // const Spacer(),
+                                    SizedBox(height: size.height * 0.015),
+
+                                    RichText(
+                                      text: TextSpan(
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: 'Welcome to Plagio',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: 'Scope',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.orange,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                '! Use our tools to check for plagiarism, transcribe speech, extract text from images, and paraphrase content.',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    TextSpan(
-                                      text: 'Scope',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '! Use our tools to check for plagiarism, transcribe speech, extract text from images, and paraphrase content.',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+
+                                    SizedBox(height: size.height * 0.012),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 6.0),
+                                      child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PickUploadReadPdf()),
+                                            ),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              height: 40,
+                                              width: 118,
+                                              child: const Center(
+                                                  child: Text(
+                                                'Start Now',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                            ),
+                                          )),
                                     ),
                                   ],
                                 ),
-                              ),
-
-                              SizedBox(height: size.height * 0.012),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 6.0),
-                                child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        ref
-                                            .read(
-                                                bottomNavIndexProvider.notifier)
-                                            .setIndex(1);
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.orange,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        height: 40,
-                                        width: 118,
-                                        child: const Center(
-                                            child: Text(
-                                          'Start Check',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                      ),
-                                    )),
-                              ),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.028),
-                const Row(
-                  children: [
-                    Icon(IconlyBroken.category),
-                    SizedBox(width: 6),
-                    Text(
-                      'Features',
-                      style: TextStyle(
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        ),
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(height: size.height * 0.008),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PickUploadReadPdf())),
-                      child: buildIconOption(
-                          'assets/images/file.png', 'Upload Doc.'),
-                    ),
-                    GestureDetector(
-                      onTap: pickAndRecognizeText,
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => const Ocr())),
-                      child: buildIconOption('assets/images/scan.png', 'OCR'),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ParaphrasePage())),
-                      child: buildIconOption(
-                          'assets/images/writing.png', 'Paraphrase'),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const VoiceToText())),
-                      child: buildIconOption(
-                          'assets/images/microphone.png', 'Speech/Text'),
-                    ),
-                  ],
-                ),
-                SizedBox(height: size.height * 0.02),
-                const Row(
-                  children: [
-                    Icon(IconlyBroken.times_quare),
-                    SizedBox(width: 6),
-                    Text(
-                      'Recent Activities',
-                      style: TextStyle(
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                      SizedBox(height: size.height * 0.028),
+                      const Row(
+                        children: [
+                          Icon(IconlyBroken.category),
+                          SizedBox(width: 6),
+                          Text(
+                            'Features',
+                            style: TextStyle(
+                              color: Color(0xFF333333),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: size.height * 0.008),
-                Expanded(
-                  child: SingleChildScrollView(
-                    // physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        buildModifiedDocumentList(date: null, filename: null),
-                        buildModifiedDocumentList(date: null, filename: null),
-                        buildModifiedDocumentList(date: null, filename: null),
-                        buildModifiedDocumentList(date: null, filename: null),
-                      ],
-                    ),
+                      SizedBox(height: size.height * 0.008),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PickUploadReadPdf())),
+                            child: buildIconOption(
+                                'assets/images/file.png', 'Upload Doc.'),
+                          ),
+                          GestureDetector(
+                            onTap: pickAndRecognizeText,
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) => const Ocr())),
+                            child: buildIconOption(
+                                'assets/images/scan.png', 'OCR'),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ParaphrasePage())),
+                            child: buildIconOption(
+                                'assets/images/writing.png', 'Paraphrase'),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const VoiceToText())),
+                            child: buildIconOption(
+                                'assets/images/microphone.png', 'Speech/Text'),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: size.height * 0.02),
+                      const Row(
+                        children: [
+                          Icon(IconlyBroken.times_quare),
+                          SizedBox(width: 6),
+                          Text(
+                            'Recent Files',
+                            style: TextStyle(
+                              color: Color(0xFF333333),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: size.height * 0.008),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          // physics: const BouncingScrollPhysics(),
+                          child: StreamBuilder(
+                            stream: firestore
+                                .collection('pdfs')
+                                .doc(user!.uid)
+                                .collection('pdf')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  !snapshot.data!.docs.isNotEmpty) {
+                                return Center(child: Text('No PDFs found.'));
+                              }
+                              final pdfDocuments = snapshot.data!.docs;
+                              // print(pdfDocuments.docs.length);
+                              return SizedBox(
+                                height: 260,
+                                child: ListView.builder(
+                                  itemCount: pdfDocuments.length,
+                                  itemBuilder: (context, index) {
+                                    final pdfData = pdfDocuments[index].data()
+                                        as Map<String, dynamic>;
+                                    final pdfName = pdfData['fileName'];
+                                    print(pdfData['url']);
+                                    final Timestamp timestamp =
+                                        pdfData['uploadedAt'];
+                                    final DateTime dateTime =
+                                        timestamp.toDate();
+                                    final String formattedDate =
+                                        "${dateTime.day}/${dateTime.month}/${dateTime.year}";
+                                    return GestureDetector(
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ReadOnlinePdf(
+                                                filename: pdfName,
+                                                url: pdfData['url']),
+                                          )),
+                                      child: buildModifiedDocumentList(
+                                          filename: pdfName,
+                                          date: formattedDate,
+                                          context: context),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-    );
+          );
   }
 }

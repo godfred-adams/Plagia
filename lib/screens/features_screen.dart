@@ -55,7 +55,7 @@ class _FeaturesScreenState extends ConsumerState<FeaturesScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return buildLightThemeBackground(
+    return Scaffold(
       // floatingActionButton: FloatingActionButton(
       //   backgroundColor: Colors.orange,
       //   onPressed: () {},
@@ -64,175 +64,186 @@ class _FeaturesScreenState extends ConsumerState<FeaturesScreen> {
       //     fit: BoxFit.cover,
       //   ),
       // ),
-      mainWidget: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    ref.read(bottomNavIndexProvider.notifier).setIndex(0);
-                  },
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.orange)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.25),
-              const Text(
-                'Features',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
-              ),
-              const Spacer(),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            height: 180,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Stack(
-                children: [
-                  Image.asset(
-                    'assets/images/card-pattern.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 180,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 180,
-                    color: const Color(0xFF276817).withOpacity(0.9),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Plagiarism Check',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        // const Spacer(),
-                        SizedBox(height: size.height * 0.018),
-                        const Text(
-                          'Accurately check your work for plagiarism. \nEnsure your content\'s originality and avoid unintentional plagiarism. \nAchieve academic integrity with confidence and produce work you can be proud of.',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        SizedBox(height: size.height * 0.012),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 6.0),
-                        //   child: Align(
-                        //       alignment: Alignment.bottomRight,
-                        //       child: GestureDetector(
-                        //         onTap: () {},
-                        //         child: Container(
-                        //           decoration: BoxDecoration(
-                        //             color: Colors.orange,
-                        //             borderRadius: BorderRadius.circular(6),
-                        //           ),
-                        //           height: 40,
-                        //           width: 118,
-                        //           child: const Center(
-                        //               child: Text(
-                        //             'Start Check',
-                        //             style: TextStyle(
-                        //                 color: Colors.white,
-                        //                 fontSize: 16,
-                        //                 fontWeight: FontWeight.bold),
-                        //           )),
-                        //         ),
-                        //       )),
-                        // ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: size.height * 0.034),
-          const Row(
-            children: [
-              Icon(IconlyBroken.category),
-              SizedBox(width: 6),
-              Text(
-                'Features',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: size.height * 0.012),
-          SizedBox(
+      appBar: AppBar(
+        backgroundColor: const Color(0xff070c16),
+        title: const Text(
+          'Features',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     IconButton(
+            //         onPressed: () {
+            //           ref.read(bottomNavIndexProvider.notifier).setIndex(0);
+            //         },
+            //         icon: const Icon(Icons.arrow_back_ios, color: Colors.orange)),
+            //     SizedBox(width: MediaQuery.of(context).size.width * 0.25),
+            //     const Text(
+            //       'Features',
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: 24,
+            //       ),
+            //     ),
+            //     const Spacer(),
+            //   ],
+            // ),
+            const SizedBox(height: 20),
+            Container(
               width: double.infinity,
-              height: 380,
-              child: ListView(
-                children: featuresList
-                    .asMap() // Convert the list to a map to get index
-                    .entries // Get the index and value pairs
-                    .map((entry) {
-                  int index = entry.key; // Get the index
-                  Map<String, dynamic> item = entry.value; // Get the item
-                  return GestureDetector(
-                    onTap: () {
-                      // Use a switch statement to determine which function to call based on the index
-                      switch (index) {
-                        case 0:
-                          // Call function for first item (e.g., Upload Document)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const PickUploadReadPdf()),
-                          );
-                          break;
-                        case 1:
-                          // Call function for second item (e.g., OCR)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Ocr()),
-                          );
-                          break;
-                        case 2:
-                          // Call function for third item (e.g., Paraphrase)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ParaphrasePage()),
-                          );
-                          break;
-                        case 3:
-                          // Call function for fourth item (e.g., Speech/Text)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const VoiceToText()),
-                          );
-                          break;
-                        default:
-                          // Handle any other cases, if necessary
-                          print('Unknown feature index: $index');
-                      }
-                    },
-                    child: buildModifiedDocumentList(
-                      item['imageUrl']!,
-                      item['title']!,
-                      item['subtitle']!,
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      'assets/images/card-pattern.jpg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 180,
                     ),
-                  );
-                }).toList(),
-              )),
-        ],
+                    Container(
+                      width: double.infinity,
+                      height: 180,
+                      color: const Color(0xFF276817).withOpacity(0.9),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Plagiarism Check',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          // const Spacer(),
+                          SizedBox(height: size.height * 0.018),
+                          const Text(
+                            'Accurately check your work for plagiarism. \nEnsure your content\'s originality and avoid unintentional plagiarism. \nAchieve academic integrity with confidence and produce work you can be proud of.',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          SizedBox(height: size.height * 0.012),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 6.0),
+                          //   child: Align(
+                          //       alignment: Alignment.bottomRight,
+                          //       child: GestureDetector(
+                          //         onTap: () {},
+                          //         child: Container(
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.orange,
+                          //             borderRadius: BorderRadius.circular(6),
+                          //           ),
+                          //           height: 40,
+                          //           width: 118,
+                          //           child: const Center(
+                          //               child: Text(
+                          //             'Start Check',
+                          //             style: TextStyle(
+                          //                 color: Colors.white,
+                          //                 fontSize: 16,
+                          //                 fontWeight: FontWeight.bold),
+                          //           )),
+                          //         ),
+                          //       )),
+                          // ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: size.height * 0.034),
+            const Row(
+              children: [
+                Icon(IconlyBroken.category),
+                SizedBox(width: 6),
+                Text(
+                  'Features',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.012),
+            SizedBox(
+                width: double.infinity,
+                height: 380,
+                child: ListView(
+                  children: featuresList
+                      .asMap() // Convert the list to a map to get index
+                      .entries // Get the index and value pairs
+                      .map((entry) {
+                    int index = entry.key; // Get the index
+                    Map<String, dynamic> item = entry.value; // Get the item
+                    return GestureDetector(
+                      onTap: () {
+                        // Use a switch statement to determine which function to call based on the index
+                        switch (index) {
+                          case 0:
+                            // Call function for first item (e.g., Upload Document)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PickUploadReadPdf()),
+                            );
+                            break;
+                          case 1:
+                            // Call function for second item (e.g., OCR)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Ocr()),
+                            );
+                            break;
+                          case 2:
+                            // Call function for third item (e.g., Paraphrase)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ParaphrasePage()),
+                            );
+                            break;
+                          case 3:
+                            // Call function for fourth item (e.g., Speech/Text)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const VoiceToText()),
+                            );
+                            break;
+                          default:
+                            // Handle any other cases, if necessary
+                            print('Unknown feature index: $index');
+                        }
+                      },
+                      child: buildModifiedDocumentList(
+                        item['imageUrl']!,
+                        item['title']!,
+                        item['subtitle']!,
+                      ),
+                    );
+                  }).toList(),
+                )),
+          ],
+        ),
       ),
     );
   }

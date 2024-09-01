@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:iconly/iconly.dart';
 
 class ParaphrasePage extends StatefulWidget {
   const ParaphrasePage({super.key});
@@ -12,11 +13,9 @@ class ParaphrasePage extends StatefulWidget {
 
 class _ParaphrasePageState extends State<ParaphrasePage> {
   // final TextEditingController _inputController = TextEditingController();
-  // final TextEditingController _outputController = TextEditingController();
+  final TextEditingController _outputController = TextEditingController();
   bool _isLoading = false;
   final quill.QuillController _inputController = quill.QuillController.basic(
-      configurations: const quill.QuillControllerConfigurations());
-  final quill.QuillController _outputController = quill.QuillController.basic(
       configurations: const quill.QuillControllerConfigurations());
 
   Future<void> makePostRequest(String text) async {
@@ -57,7 +56,7 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
       // print('Response body: $responseString');
       if (response.statusCode == 200) {
         setState(() {
-          // _outputController.text = responseString;
+          _outputController.text = responseString;
         });
       }
 
@@ -66,7 +65,7 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
       });
     } catch (e) {
       setState(() {
-        // _outputController.text = 'Request failed with error: $e';
+        _outputController.text = 'Request failed with error: $e';
       });
     } finally {
       setState(() {
@@ -79,38 +78,52 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // appBar: AppBar(title: const Text('Paraphrase Text')),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff070c16),
+        title: const Text(
+          'Paraphrase',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(IconlyBroken.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon:
-                        const Icon(Icons.arrow_back_ios, color: Colors.orange),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.24),
-                  const Text(
-                    'Paraphrase',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
+              // const SizedBox(height: 15),
+              // Row(
+              //   children: [
+              //     IconButton(
+              //       onPressed: () {
+              //         Navigator.pop(context);
+              //       },
+              //       icon:
+              //           const Icon(Icons.arrow_back_ios, color: Colors.orange),
+              //     ),
+              //     SizedBox(width: MediaQuery.of(context).size.width * 0.21),
+              //     const Text(
+              //       'Paraphrase',
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 24,
+              //       ),
+              //     ),
+              //     const Spacer(),
+              //   ],
+              // ),
               const SizedBox(height: 24),
               const Text(
                 'Enter text to paraphrase',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 // textAlign: TextAlign.left,
               ),
               const SizedBox(height: 10),
@@ -151,15 +164,6 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
                   ],
                 ),
               ),
-              // TextField(
-              //   textInputAction: TextInputAction.done,
-              //   controller: _inputController,
-              //   decoration: const InputDecoration(
-              //     border: OutlineInputBorder(),
-              //     labelText: 'Enter text to paraphrase',
-              //   ),
-              //   maxLines: null,
-              // ),
               const SizedBox(height: 16.0),
               SizedBox(
                 width: double.infinity,
@@ -174,9 +178,11 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
                   onPressed: _isLoading
                       ? () {}
                       : () {
-                          // final text = _inputController.text;
-                          // if (text.isNotEmpty) {
-                          //   makePostRequest(text);
+                          final text = _inputController.document.toPlainText();
+                          if (text.isNotEmpty) {
+                            print(text);
+                            makePostRequest(text);
+                          }
                         },
                   child: _isLoading
                       ? const Center(
@@ -191,74 +197,21 @@ class _ParaphrasePageState extends State<ParaphrasePage> {
                         ),
                 ),
               ),
-
-              // ElevatedButton(
-              //   onPressed: _isLoading
-              //       ? null
-              //       : () {
-              //           // final text = _inputController.text;
-              //           // if (text.isNotEmpty) {
-              //           //   makePostRequest(text);
-              //           // }
-              //         },
-              // child: _isLoading
-              //     ? const CircularProgressIndicator()
-              //     : const Text('Paraphrase'),
-              // ),
               const SizedBox(height: 16.0),
-
               const Text(
                 'Paraphrased Text',
-                style: TextStyle(fontSize: 16),
-                // textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
+              TextField(
+                controller: _outputController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Paraphrased text',
                 ),
-                child: Column(
-                  children: [
-                    quill.QuillSimpleToolbar(
-                      controller: _outputController,
-                      configurations:
-                          const quill.QuillSimpleToolbarConfigurations(
-                        showSuperscript: false,
-                        showSubscript: false,
-                        showFontSize: false,
-                        showFontFamily: false,
-                        showStrikeThrough: false,
-                        showInlineCode: false,
-                        showBackgroundColorButton: false,
-                        showClearFormat: false,
-                        showHeaderStyle: false,
-                        showColorButton: false,
-                        showListCheck: false,
-                        showQuote: false,
-                        showCodeBlock: false,
-                        showIndent: false,
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      child: quill.QuillEditor.basic(
-                        controller: _outputController,
-                      ),
-                    ),
-                  ],
-                ),
+                maxLines: null,
+                readOnly: true,
               ),
-              // TextField(
-              //   controller: _outputController,
-              //   decoration: const InputDecoration(
-              //     border: OutlineInputBorder(),
-              //     labelText: 'Paraphrased text',
-              //   ),
-              //   maxLines: null,
-              //   readOnly: true,
-              // ),
             ],
           ),
         ),

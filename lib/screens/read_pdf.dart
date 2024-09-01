@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:plagia_oc/screens/check_plagia.dart';
 import 'package:plagia_oc/screens/check_plagiarism_page.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -73,6 +74,24 @@ class _ReadPdfState extends State<ReadPdf> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xff070c16),
+        title: Text(
+          widget.fileName,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(IconlyBroken.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -80,27 +99,27 @@ class _ReadPdfState extends State<ReadPdf> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: Colors.orange),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.2),
-                    Text(
-                      widget.fileName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+                // const SizedBox(height: 10),
+                // Row(
+                //   children: [
+                //     IconButton(
+                //       onPressed: () {
+                //         Navigator.of(context).pop();
+                //       },
+                //       icon: const Icon(Icons.arrow_back_ios,
+                //           color: Colors.orange),
+                //     ),
+                //     SizedBox(width: MediaQuery.of(context).size.width * 0.2),
+                //     Text(
+                //       widget.fileName,
+                //       style: const TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         fontSize: 18,
+                //       ),
+                //     ),
+                //     const Spacer(),
+                //   ],
+                // ),
                 const SizedBox(height: 12),
                 const Text(
                   "Text Editor",

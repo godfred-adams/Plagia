@@ -27,12 +27,57 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  // Regular expressions for validating email name and password
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
+  final passwordRegex = RegExp(
+    r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+  );
+
   void signUp() async {
-    print("sign up ......");
+    // print("sign up ......");
     if (emailController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty &&
         nameController.text.trim().isNotEmpty &&
         confirmPasswordController.text.trim().isNotEmpty) {
+      // Check if the name contains numbers
+      if (!nameRegex.hasMatch(nameController.text.trim())) {
+        showSnackBar(
+          context: context,
+          txt: "Name can only contain alphabetic letters and spaces.",
+        );
+        return;
+      }
+
+      // Check if email format is valid
+      if (!emailRegex.hasMatch(emailController.text.trim())) {
+        showSnackBar(
+          context: context,
+          txt: "Invalid email format. Please enter a valid email address.",
+        );
+        return;
+      }
+
+      // Check if the password meets strength requirements
+      if (!passwordRegex.hasMatch(passwordController.text.trim())) {
+        showSnackBar(
+          context: context,
+          txt:
+              "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
+        );
+        return;
+      }
+
+      // Check if passwords match
+      if (passwordController.text.trim() !=
+          confirmPasswordController.text.trim()) {
+        showSnackBar(
+          context: context,
+          txt: "Passwords do not match. Please check and try again.",
+        );
+        return;
+      }
+
       try {
         setState(() {
           isLoading = true;
@@ -43,9 +88,15 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
             password: passwordController.text.trim(),
             context: context);
         if (res == "Successful") {
-          showSnackBar(
+          showSuccessSnackBar(
               context: context,
-              txt: 'Successful sign up \n login with the same credentials');
+              txt:
+                  "Account created Sucessfully. \nKindly login with your email and password.");
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
         }
         setState(() {
           isLoading = false;
@@ -56,10 +107,20 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
         });
         showSnackBar(context: context, txt: err.toString());
       }
+    } else if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty ||
+        confirmPasswordController.text.trim().isEmpty) {
+      showSnackBar(
+        context: context,
+        txt: "Input fields cannot be empty.",
+      );
+      return;
     } else {
       showSnackBar(
           context: context,
-          txt: "Something went wrong check your credentials well");
+          txt:
+              "Something went wrong. Check your network connection and try again");
     }
   }
 
@@ -154,41 +215,7 @@ class _LoginPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Center(
-                    child: Text(
-                      'or continue with',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey.shade300,
-                          child: Image.asset(
-                            'assets/images/google.png',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () {},
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey.shade300,
-                          child: Image.asset(
-                            'assets/images/apple_logo.png',
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 70),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

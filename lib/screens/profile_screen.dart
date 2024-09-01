@@ -7,7 +7,7 @@ import '../../../utils/user_provider.dart';
 import '../../../utils/usermodel.dart';
 import 'package:plagia_oc/widgets/build_light_theme_background.dart';
 
-import 'edit_password_page.dart';
+// import 'edit_password_page.dart';
 import 'login_page.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -22,10 +22,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   UserModel? user;
 
   Future<void> loadUser() async {
+    setState(() {
+      isLoading = true;
+    });
     final loadedUser = await ref.read(userProvider.notifier).loadUser();
-    debugPrint(loadedUser.toString());
+    // debugPrint(loadedUser.toString());
     setState(() {
       user = loadedUser;
+      isLoading = false;
     });
     print(user);
   }
@@ -64,136 +68,136 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     String suffix = getDaySuffix(day);
     String formattedDate = DateFormat("MMMM, yyyy").format(now);
 
-    return buildLightThemeBackground(
-      mainWidget: Center(
-        child: Column(
-          children: [
-            SizedBox(height: size.height * 0.016),
-            const Text(
-              'Profile',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xff070c16),
+              title: const Text(
+                'Profile',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
+              centerTitle: true,
             ),
-            SizedBox(height: size.height * 0.022),
-            Container(
-              height: 120,
-              width: 120,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.orange, width: 2),
-                shape: BoxShape.circle,
-                color: Colors.orange,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
-                ],
-              ),
-              child: const CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/images/per.png'),
-              ),
-            ),
-            SizedBox(height: size.height * 0.012),
-
-            // Display the formatted date with superscript suffix
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: day,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    // SizedBox(height: size.height * 0.016),
+                    // const Text(
+                    //   'Profile',
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 24,
+                    //   ),
+                    // ),
+                    SizedBox(height: size.height * 0.03),
+                    Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.orange, width: 2),
+                        shape: BoxShape.circle,
+                        color: Colors.orange,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3)),
+                        ],
+                      ),
+                      child: const CircleAvatar(
+                        radius: 60,
+                        backgroundImage:
+                            AssetImage('assets/images/profile_icon.png'),
+                      ),
                     ),
-                  ),
-                  WidgetSpan(
-                    child: Transform.translate(
-                      offset: const Offset(1.0, -5.0),
-                      child: Text(
-                        suffix,
+                    SizedBox(height: size.height * 0.012),
 
-                        // textScaleFactor: 0.7,
+                    // Display the formatted date with superscript suffix
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: day,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          // WidgetSpan(
+                          //   child: Transform.translate(
+                          //     offset: const Offset(1.0, -5.0),
+                          //     child: Text(
+                          //       suffix,
 
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
+                          //       // textScaleFactor: 0.7,
+
+                          //       style: const TextStyle(
+                          //         fontWeight: FontWeight.w500,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          TextSpan(
+                            text: ' $formattedDate',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: size.height * 0.014),
+                    const Row(
+                      children: [
+                        Text(
+                          'Personal Information',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  TextSpan(
-                    text: ' $formattedDate',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: size.height * 0.008),
+                    _buildPersonalInfo(context, user!),
+                    SizedBox(height: size.height * 0.05),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Utilities',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: size.height * 0.008),
+                    _buildUtilities(context),
+                    SizedBox(height: size.height * 0.03),
+                    _buildLogoutButton(),
+                  ],
+                ),
               ),
             ),
-
-            SizedBox(height: size.height * 0.014),
-            Row(
-              children: [
-                const Text(
-                  'Personal Information',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditPasswordScreen()));
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(IconlyBold.edit, size: 18),
-                      SizedBox(width: 2),
-                      Text(
-                        'Edit',
-                        style: TextStyle(fontSize: 18, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: size.height * 0.008),
-            _buildPersonalInfo(context, user!),
-            SizedBox(height: size.height * 0.032),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Utilities',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ],
-            ),
-            SizedBox(height: size.height * 0.008),
-            _buildUtilities(context),
-            SizedBox(height: size.height * 0.028),
-            _buildLogoutButton(),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget _buildUtilities(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
-        _buildUtilitiesBox(
-          icon: const Icon(Icons.color_lens_rounded),
-          title: 'Theme',
-          isSwitch: true, // Add a flag to handle the switch
-        ),
+        // _buildUtilitiesBox(
+        //   icon: const Icon(Icons.color_lens_rounded),
+        //   title: 'Theme',
+        //   isSwitch: true, // Add a flag to handle the switch
+        // ),
         SizedBox(height: size.height * 0.004),
         _buildUtilitiesBox(
           icon: const Icon(IconlyLight.shield_done),
@@ -251,17 +255,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildPersonalInfo(BuildContext context, UserModel user) {
+  Widget _buildPersonalInfo(BuildContext context, UserModel? user) {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
         _buildPersonalInfoBox(
           0,
-          Icon(IconlyBroken.profile),
+          const Icon(IconlyBroken.profile),
           'Name',
           Text(
-            user.name,
-            style: TextStyle(
+            user!.name,
+            style: const TextStyle(
               fontSize: 16,
             ),
           ),
@@ -273,39 +277,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           'Email',
           Text(
             user.email,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
             ),
           ),
         ),
         SizedBox(height: size.height * 0.0036),
-        _buildPersonalInfoBox(
-          2,
-          const Icon(IconlyBroken.lock),
-          'Password',
-          Row(
-            children: [
-              Text(
-                _obscureText ? '*********' : 'myPassword123',
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(width: 6),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-                child: Icon(
-                  _obscureText ? IconlyBroken.hide : IconlyBroken.show,
-                  size: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // _buildPersonalInfoBox(
+        //   2,
+        //   const Icon(IconlyBroken.lock),
+        //   'Password',
+        //   Row(
+        //     children: [
+        //       Text(
+        //         _obscureText ? '*********' : 'myPassword123',
+        //         style: const TextStyle(
+        //           fontSize: 16,
+        //         ),
+        //       ),
+        //       const SizedBox(width: 6),
+        //       GestureDetector(
+        //         onTap: () {
+        //           setState(() {
+        //             _obscureText = !_obscureText;
+        //           });
+        //         },
+        //         child: Icon(
+        //           _obscureText ? IconlyBroken.hide : IconlyBroken.show,
+        //           size: 20,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }
@@ -323,7 +327,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               )
-            : index == 2
+            : index == 1
                 ? const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
@@ -432,10 +436,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               onPressed: () async {
                 final loadedUser = ref.read(userProvider.notifier);
                 await loadedUser.clearUser();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (Route<dynamic> route) => false);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
+
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(

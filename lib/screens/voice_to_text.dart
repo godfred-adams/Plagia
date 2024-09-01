@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:iconly/iconly.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
@@ -17,7 +18,7 @@ class _VoiceToTextState extends State<VoiceToText>
 
   bool _speechEnabled = false;
   String _wordsSpoken = "";
-  double _confidenceLevel = 0;
+  // double _confidenceLevel = 0;
   final quill.QuillController _inputController = quill.QuillController.basic(
       configurations: const quill.QuillControllerConfigurations());
 
@@ -85,7 +86,6 @@ class _VoiceToTextState extends State<VoiceToText>
   void _onSpeechResult(result) {
     setState(() {
       _wordsSpoken = result.recognizedWords;
-      _confidenceLevel = result.confidence;
     });
   }
 
@@ -93,33 +93,48 @@ class _VoiceToTextState extends State<VoiceToText>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xff070c16),
+        title: const Text(
+          'Speech-to-text',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(IconlyBroken.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 44),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon:
-                        const Icon(Icons.arrow_back_ios, color: Colors.orange),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.30),
-                  const Text(
-                    'Dictate',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-
+              // const SizedBox(height: 23),
+              // Row(
+              //   children: [
+              //     IconButton(
+              //       onPressed: () {
+              //         Navigator.pop(context);
+              //       },
+              //       icon:
+              //           const Icon(Icons.arrow_back_ios, color: Colors.orange),
+              //     ),
+              //     SizedBox(width: MediaQuery.of(context).size.width * 0.19),
+              //     const Text(
+              //       'Speech-to-text',
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 24,
+              //       ),
+              //     ),
+              //     // const Spacer(),
+              //   ],
+              // ),
+              const SizedBox(height: 24),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -193,7 +208,7 @@ class _VoiceToTextState extends State<VoiceToText>
                   ],
                 ),
               ),
-              SizedBox(height: 36),
+              const SizedBox(height: 36),
 
               // Container(
               //   padding: const EdgeInsets.all(16),
@@ -227,19 +242,19 @@ class _VoiceToTextState extends State<VoiceToText>
               //     ),
               //   ),
               // ),
-              if (!_isListening && _confidenceLevel > 0)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 100,
-                  ),
-                  child: Text(
-                    "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                ),
+              // if (!_isListening && _confidenceLevel > 0)
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //     bottom: 100,
+              //   ),
+              //   child: Text(
+              //     "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
+              //     style: const TextStyle(
+              //       fontSize: 30,
+              //       fontWeight: FontWeight.w200,
+              //     ),
+              //   ),
+              // ),
               Positioned(
                 bottom: size.height * 0.08,
                 child: GestureDetector(

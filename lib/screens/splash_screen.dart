@@ -25,10 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.lightGreen,
-      body: Center(
-        child: Image(image: AssetImage("assets/images/splash_icon.png")),
+    return Scaffold(
+      backgroundColor: Colors.orange[600],
+      body: const Center(
+        // child: Image(image: AssetImage("assets/images/splash_icon.png")),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(image: AssetImage("assets/images/splash_icon.png")),
+            SizedBox(height: 20.0),
+            Text(
+              'PlagioScope',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

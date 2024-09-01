@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:iconly/iconly.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class PlagiarismResultScreen extends StatefulWidget {
   const PlagiarismResultScreen({super.key, required this.text});
@@ -13,6 +17,8 @@ class PlagiarismResultScreen extends StatefulWidget {
 }
 
 class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
+  double plaper = 0.0;
+  List<dynamic> plagiarismSoucre = [];
   var res;
   quill.QuillController _controller = quill.QuillController.basic(
       configurations: const quill.QuillControllerConfigurations());
@@ -28,7 +34,14 @@ class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         // Process the response (e.g., show the result on the UI)
-        print(jsonResponse);
+
+        setState(() {
+          plaper = jsonResponse['topResult']['score'].toDouble() ?? 0;
+          plagiarismSoucre = jsonResponse['topResult']['links'] ?? [];
+        });
+        print(plaper);
+        print(jsonResponse['topResult']['links']);
+        print(plagiarismSoucre);
       } else {
         print('Failed to check plagiarism: ${response.statusCode}');
       }
@@ -65,6 +78,7 @@ class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
         print('Response: $responseData');
         setState(() {
           res = responseData;
+          // plagiarismSoucre = responseData;
         });
       } else {
         print('Request failed with status: ${response.statusCode}.');
@@ -90,7 +104,19 @@ class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plagiarism Result'),
+        backgroundColor: const Color(0xff070c16),
+        title: const Text(
+          'Plagiarism Result',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(IconlyBroken.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -153,18 +179,13 @@ class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
                 children: [
                   _buildResultIndicator(
                     "Unique content",
-                    0.28,
+                    (100 - plaper) / 100,
                     Colors.green,
                   ),
                   _buildResultIndicator(
-                    "External content",
-                    0.25,
+                    "Plagiarised content",
+                    plaper / 100,
                     Colors.red,
-                  ),
-                  _buildResultIndicator(
-                    "AI generated",
-                    0.47,
-                    Colors.orange,
                   ),
                 ],
               ),
@@ -180,11 +201,33 @@ class PlagiarismResultScreenState extends State<PlagiarismResultScreen> {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Center(
-                  child: Text(
-                    "No sources found",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                child: Center(
+                  child: plagiarismSoucre.isEmpty
+                      ? const Text(
+                          "No sources found",
+                          style: TextStyle(color: Colors.grey),
+                        )
+                      : ListView.builder(
+                          itemCount: plagiarismSoucre.length,
+                          itemBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    final Uri url =
+                                        Uri.parse(plagiarismSoucre[index]);
+                                    if (!await launchUrl(url)) {
+                                      throw 'Could not launch $url';
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
+                                  child: Text(
+                                    plagiarismSoucre[index],
+                                    style:
+                                        TextStyle(color: Colors.blue.shade600),
+                                  ),
+                                ),
+                              )),
                 ),
               ),
             ],

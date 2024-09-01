@@ -56,6 +56,8 @@ dependencies:
   iconly: ^1.0.1
   google_fonts: ^6.2.1
   percent_indicator: ^4.2.3
+  syncfusion_flutter_pdfviewer: ^26.2.11
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

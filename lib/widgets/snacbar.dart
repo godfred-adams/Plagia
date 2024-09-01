@@ -10,6 +10,16 @@ void showSnackBar({required BuildContext context, required String txt}) {
   ));
 }
 
+void showSuccessSnackBar({required BuildContext context, required String txt}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      txt,
+      style: const TextStyle(color: Colors.white),
+    ),
+    backgroundColor: Colors.green,
+  ));
+}
+
 String getErrorMessage(String error) {
   final RegExp regex = RegExp(r'\[(.*?)\]\s*(.*)');
   final Match? match = regex.firstMatch(error);
